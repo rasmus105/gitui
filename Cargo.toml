@@ -8,6 +8,8 @@ ratatui = { version = "0.30.1" }
 color-eyre = "0.6.3"
 crossterm = "0.29.0"
 gix = "0.84.0"
+anyhow = "1.0.102"
+crossbeam = "0.8.4"
 
 [build]
 jobs = 0
