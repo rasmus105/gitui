@@ -10,9 +10,7 @@ crossterm = "0.29.0"
 gix = "0.84.0"
 anyhow = "1.0.102"
 crossbeam = "0.8.4"
-
-[build]
-jobs = 0
+devicons = "0.6.12"
 
 [profile.release]
 codegen-units = 1 # Allows compiler to perform better optimization.

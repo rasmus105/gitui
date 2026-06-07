@@ -1,4 +1,6 @@
 mod changes;
+mod common;
+mod file_display;
 mod log;
 mod refs;
 
@@ -30,7 +32,7 @@ enum Tab {
 #[derive(Default)]
 pub struct Ui {
     tab: Tab,
-    message: Option<&'static str>,
+    message: Option<String>,
     // ---  UI components ---
     changes: Changes,
 }
@@ -47,8 +49,8 @@ impl Ui {
         }
 
         // Render bottom status bar.
-        if let Some(message) = self.message {
-            frame.render_widget(Paragraph::new(message), message_area);
+        if let Some(message) = &self.message {
+            frame.render_widget(Paragraph::new(message.as_str()), message_area);
         }
     }
 
@@ -59,8 +61,8 @@ impl Ui {
         }
     }
 
-    pub fn set_message(&mut self, message: &'static str) {
-        self.message = Some(message);
+    pub fn set_message(&mut self, message: impl Into<String>) {
+        self.message = Some(message.into());
     }
 
     fn layout(&self, area: Rect) -> (Rect, Rect) {

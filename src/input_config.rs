@@ -19,6 +19,12 @@ struct Shortcut {
     pub modifiers: KeyModifiers,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct Binding {
+    action: InputAction,
+    shortcuts: Vec<Shortcut>,
+}
+
 impl Shortcut {
     pub const fn new(code: KeyCode, modifiers: KeyModifiers) -> Self {
         Self { code, modifiers }
@@ -38,51 +44,69 @@ impl Shortcut {
 
 #[derive(Debug, Clone)]
 pub struct InputConfig {
-    bindings: Vec<(Shortcut, InputAction)>,
+    bindings: Vec<Binding>,
 }
 
 impl Default for InputConfig {
     fn default() -> Self {
         Self {
             bindings: vec![
-                (Shortcut::char('k'), InputAction::Up),
-                (
-                    Shortcut::new(KeyCode::Up, KeyModifiers::NONE),
+                Binding::new(
                     InputAction::Up,
+                    vec![
+                        Shortcut::char('k'),
+                        Shortcut::new(KeyCode::Up, KeyModifiers::NONE),
+                    ],
                 ),
-                (Shortcut::char('j'), InputAction::Down),
-                (
-                    Shortcut::new(KeyCode::Down, KeyModifiers::NONE),
+                Binding::new(
                     InputAction::Down,
+                    vec![
+                        Shortcut::char('j'),
+                        Shortcut::new(KeyCode::Down, KeyModifiers::NONE),
+                    ],
                 ),
-                (Shortcut::char('h'), InputAction::Left),
-                (
-                    Shortcut::new(KeyCode::Left, KeyModifiers::NONE),
+                Binding::new(
                     InputAction::Left,
+                    vec![
+                        Shortcut::char('h'),
+                        Shortcut::new(KeyCode::Left, KeyModifiers::NONE),
+                    ],
                 ),
-                (Shortcut::char('l'), InputAction::Right),
-                (
-                    Shortcut::new(KeyCode::Right, KeyModifiers::NONE),
+                Binding::new(
                     InputAction::Right,
+                    vec![
+                        Shortcut::char('l'),
+                        Shortcut::new(KeyCode::Right, KeyModifiers::NONE),
+                    ],
                 ),
-                (
-                    Shortcut::new(KeyCode::Enter, KeyModifiers::NONE),
+                Binding::new(
                     InputAction::Select,
+                    vec![Shortcut::new(KeyCode::Enter, KeyModifiers::NONE)],
                 ),
-                (
-                    Shortcut::new(KeyCode::Esc, KeyModifiers::NONE),
+                Binding::new(
                     InputAction::Back,
+                    vec![Shortcut::new(KeyCode::Esc, KeyModifiers::NONE)],
                 ),
-                (Shortcut::char('q'), InputAction::Quit),
+                Binding::new(InputAction::Quit, vec![Shortcut::char('q')]),
             ],
         }
     }
 }
 
+impl Binding {
+    fn new(action: InputAction, shortcuts: Vec<Shortcut>) -> Self {
+        Self { action, shortcuts }
+    }
+}
+
 impl InputConfig {
     pub fn action_for(&self, event: KeyEvent) -> Option<InputAction> {
-        self.bindings
-            .iter()
-            .find_map(|(shortcut, action)| shortcut.matches(event).then_some(*action))
+        self.bindings.iter().find_map(|binding| {
+            binding
+                .shortcuts
+                .iter()
+                .any(|shortcut| shortcut.matches(event))
+                .then_some(binding.action)
+        })
     }
 }
