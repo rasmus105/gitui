@@ -1,11 +1,11 @@
-use crate::repo_state::{FileChange, FileStatus};
+use crate::git::{File, FileStatus};
 use devicons::FileIcon;
 use ratatui::{
     style::{Color, Modifier, Style},
     text::{Line, Span},
 };
 
-pub(crate) fn file_change_line(file: &FileChange) -> Line<'static> {
+pub(crate) fn file_change_line(file: &File) -> Line<'static> {
     let icon = FileIcon::from(&file.path);
 
     let mut spans = vec![

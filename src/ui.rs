@@ -1,11 +1,11 @@
 mod changes;
 mod common;
-mod file_display;
 mod log;
 mod refs;
+pub mod utils;
 
 use crate::input_config::InputAction;
-use crate::repo_state::RepoState;
+use crate::state::State;
 use changes::Changes;
 use ratatui::{
     Frame,
@@ -33,22 +33,20 @@ enum Tab {
 pub struct Ui {
     tab: Tab,
     message: Option<String>,
-    // ---  UI components ---
     changes: Changes,
 }
 
 impl Ui {
-    pub fn draw(&mut self, frame: &mut Frame, repo: &RepoState) {
+    pub fn draw(&mut self, frame: &mut Frame, state: &State) {
         let (content_area, message_area) = self.layout(frame.area());
 
         match self.tab {
-            Tab::Changes => self.changes.draw(frame, content_area, repo),
+            Tab::Changes => self.changes.draw(frame, content_area, state),
             Tab::Refs => {}
             Tab::Log => {}
             Tab::Overview => {}
         }
 
-        // Render bottom status bar.
         if let Some(message) = &self.message {
             frame.render_widget(Paragraph::new(message.as_str()), message_area);
         }

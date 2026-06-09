@@ -1,14 +1,18 @@
 use anyhow::Result;
 
-mod gitui;
+mod app;
+mod r#async;
+mod git;
 mod input_config;
-mod repo_state;
+mod state;
 mod ui;
 
-use gitui::Gitui;
+use app::App;
 
 fn main() -> Result<()> {
-    let mut gitui = Gitui::init();
+    // TODO: setup panic handlers and stuff here
+
+    let mut gitui = App::init()?;
 
     ratatui::run(|terminal| gitui.run(terminal))?;
 

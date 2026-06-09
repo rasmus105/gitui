@@ -1,7 +1,7 @@
 use super::super::common;
+use super::super::utils::file_display;
+use crate::git::File;
 use crate::input_config::InputAction;
-use crate::repo_state::FileChange;
-use crate::ui::file_display;
 use ratatui::{
     Frame,
     layout::Rect,
@@ -25,7 +25,7 @@ impl FileList {
         self.list_state.select(Some(selected));
     }
 
-    pub fn draw(&mut self, frame: &mut Frame, area: Rect, files: &[FileChange], focused: bool) {
+    pub fn draw(&mut self, frame: &mut Frame, area: Rect, files: &[File], focused: bool) {
         self.sync(files.len());
 
         let block = common::block("Files", focused);

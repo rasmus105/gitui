@@ -11,6 +11,9 @@ gix = "0.84.0"
 anyhow = "1.0.102"
 crossbeam = "0.8.4"
 devicons = "0.6.12"
+rayon = "1.11.0"
+strum = "0.28.0"
+enum-map = "2.7.3"
 
 [profile.release]
 codegen-units = 1 # Allows compiler to perform better optimization.
