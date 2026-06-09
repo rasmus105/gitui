@@ -4,6 +4,7 @@ mod app;
 mod r#async;
 mod git;
 mod input_config;
+mod input_worker;
 mod state;
 mod ui;
 
